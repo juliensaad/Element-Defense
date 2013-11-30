@@ -155,17 +155,42 @@
 }
 
 -(void)createMinion{
-	// walker creation, adding to canvas and to array then making him walk
-	Minion *sn = [Minion spriteNodeWithImageNamed:@"docteur"];
-	[sn setScale:0.5];
-		
+	// [Minion spriteNodeWithImageNamed:@"docteur"];//
+	Minion *sn = [Minion spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(MINION_SIZE, MINION_SIZE)];
+	[sn setWalkingSpeed:0.01];
+	[sn setMaxHp:1536];
+	
 	sn.position = CGPointMake(0, 100);
 	sn.name = @"Minion";
+	
+	[sn createHealthbar];
     
     [_minions addObject:sn];
 	
+	[sn updateHPBar:1450];
+	
+	//[sn addChild:healthBar];
 
-	[sn walk];
+	
+	NSMutableArray *path = [[NSMutableArray alloc] init];
+	
+	RouteStep *s1 = [[RouteStep alloc] init];
+	s1.posX = 50;
+	s1.posY = 50;
+	
+	RouteStep *s2 = [[RouteStep alloc] init];
+	s2.posX = 100;
+	s2.posY = 50;
+	
+	RouteStep *s3 = [[RouteStep alloc] init];
+	s3.posX = 100;
+	s3.posY = 100;
+	
+	[path addObject:s1];
+	[path addObject:s2];
+	[path addObject:s3];
+	
+	[sn walkPath:path atIndex:0];
 	[self addChild:sn];
 
 }

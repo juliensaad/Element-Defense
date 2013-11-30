@@ -10,5 +10,20 @@
 
 @interface Minion : SKSpriteNode
 
+@property CGPoint minionPosition;
+@property int maxHp;
+@property int currentHp;
+@property float walkingSpeed;
+
+@property (nonatomic, strong) SKShapeNode* health;
+@property (nonatomic, strong) SKShapeNode* missingHealth;
+
 -(void)walk;
+
+-(void)updateHPBar:(int)hp;
+
+-(void)createHealthbar;
+
+-(void)walkPath:(NSArray*)path atIndex:(int)index;
+
 @end

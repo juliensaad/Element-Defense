@@ -16,6 +16,7 @@
 		0C65374B184A84F2001FE553 /* PESGraphRouteStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C653746184A84F2001FE553 /* PESGraphRouteStep.m */; };
 		0C65374E184A8CD3001FE553 /* Minion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C65374D184A8CD3001FE553 /* Minion.m */; };
 		0C653750184A8D8F001FE553 /* docteur@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C65374F184A8D8F001FE553 /* docteur@2x.png */; };
+		0C653756184A9E73001FE553 /* RouteStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C653755184A9E73001FE553 /* RouteStep.m */; };
 		0CE295B81848ED4D001E8306 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295B71848ED4D001E8306 /* Foundation.framework */; };
 		0CE295BA1848ED4D001E8306 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295B91848ED4D001E8306 /* CoreGraphics.framework */; };
 		0CE295BC1848ED4D001E8306 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295BB1848ED4D001E8306 /* UIKit.framework */; };
@@ -65,6 +66,8 @@
 		0C65374C184A8CD3001FE553 /* Minion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Minion.h; sourceTree = "<group>"; };
 		0C65374D184A8CD3001FE553 /* Minion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Minion.m; sourceTree = "<group>"; };
 		0C65374F184A8D8F001FE553 /* docteur@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "docteur@2x.png"; path = "PESGraph/docteur@2x.png"; sourceTree = "<group>"; };
+		0C653754184A9E73001FE553 /* RouteStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteStep.h; sourceTree = "<group>"; };
+		0C653755184A9E73001FE553 /* RouteStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteStep.m; sourceTree = "<group>"; };
 		0CE295B41848ED4D001E8306 /* Element Defense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Element Defense.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE295B71848ED4D001E8306 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0CE295B91848ED4D001E8306 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -127,6 +130,8 @@
 				0C653739184A8187001FE553 /* Tower.m */,
 				0C65374C184A8CD3001FE553 /* Minion.h */,
 				0C65374D184A8CD3001FE553 /* Minion.m */,
+				0C653754184A9E73001FE553 /* RouteStep.h */,
+				0C653755184A9E73001FE553 /* RouteStep.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 			files = (
 				0C653748184A84F2001FE553 /* PESGraphEdge.m in Sources */,
 				0C653749184A84F2001FE553 /* PESGraphNode.m in Sources */,
+				0C653756184A9E73001FE553 /* RouteStep.m in Sources */,
 				0CE3314F1848EEF200F95CA1 /* Grid.m in Sources */,
 				0C65374A184A84F2001FE553 /* PESGraphRoute.m in Sources */,
 				0C65374B184A84F2001FE553 /* PESGraphRouteStep.m in Sources */,
