@@ -46,7 +46,7 @@
 			
 			
 			[tower setPosition:CGPointMake(i*TOWER_SIZE, j*TOWER_SIZE)];
-			NSLog(@"%f %f", tower.position.x, tower.position.y);
+    
 			[_grid addChild:tower];
 			[_towerArray addObject:tower];
 		}
@@ -60,8 +60,61 @@
 
 // Redraw walking path
 -(void)drawWalkingPath{
-
-	
+    BOOL grid[NB_TOWER_X][NB_TOWER_Y];
+    for(Tower *t in _towerArray){
+        if (t.type==0) {
+            grid[t.posX][t.posY] = NO;
+        }else{
+            grid[t.posX][t.posY] = YES;
+        }
+    }
+   /* for(int i=0;i<NB_TOWER_X;i++){
+        for (int j=0; j<NB_TOWER_Y; j++) {
+             NSLog(@"(%d,%d) %d",i,j, grid[i][j]);
+        }
+    }*/
+    
+    int currentX=0;
+    int currentY=0;
+    int endX=NB_TOWER_X-1;
+    int endY=NB_TOWER_Y-1;
+    
+    SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
+    [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
+    [_grid addChild:pathElement];
+    
+    while (currentX<endX || currentY<endY) {
+        // not arrived in x and in y
+        if (currentX<endX && currentY<endY) {
+            // if diagonal is free
+            if (!grid[currentX+1][currentY+1] && !grid[currentX+1][currentY] && !grid[currentX][currentY+1]) {
+                currentX++;
+                currentY++;
+            }
+            else if(!grid[currentX+1][currentY]){
+                currentX++;
+            }
+            else if(!grid[currentX][currentY+1]){
+                currentY++;
+            }
+        }
+        // arrived in y not in x
+        else if(currentX<endX && currentY>=endY){
+            currentX++;
+        }
+        // arrived in x not in y
+        else if(currentX>=endX && currentY<endY){
+            currentY++;
+        }
+        
+        NSLog(@"path");
+        
+        SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
+        [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
+        [_grid addChild:pathElement];
+    }
+    
+    NSLog(@"(%d,%d)", currentX,currentY);
 }
 
 -(void)addTowerAtLocation:(CGPoint)location{
