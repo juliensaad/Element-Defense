@@ -23,6 +23,7 @@
 	
         self.backgroundColor = [SKColor colorWithRed:0.80 green:0.80 blue:0.80 alpha:1.0];
 
+        _path = [[NSMutableArray alloc] init];
 		_towerArray = [[NSMutableArray alloc] init];
 		_minions = [[NSMutableArray alloc] init];
 		
@@ -59,7 +60,10 @@
 
 
 // Redraw walking path
--(void)drawWalkingPath{
+-(void)updatePath{
+    
+    [_path removeAllObjects];
+    
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
     for(Tower *t in _towerArray){
         if (t.type==0) {
@@ -68,11 +72,6 @@
             grid[t.posX][t.posY] = YES;
         }
     }
-   /* for(int i=0;i<NB_TOWER_X;i++){
-        for (int j=0; j<NB_TOWER_Y; j++) {
-             NSLog(@"(%d,%d) %d",i,j, grid[i][j]);
-        }
-    }*/
     
     int currentX=0;
     int currentY=0;
@@ -112,6 +111,12 @@
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
         [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
         [_grid addChild:pathElement];
+        
+        RouteStep* s =[[RouteStep alloc] init];
+        s.posX=currentX*TOWER_SIZE;
+        s.posY=currentY*TOWER_SIZE;
+        [_path addObject:s];
+        
     }
     
     NSLog(@"(%d,%d)", currentX,currentY);
@@ -137,7 +142,7 @@
 		}
 	}
 	
-	[self drawWalkingPath];
+	[self updatePath];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
@@ -170,9 +175,6 @@
 	[sn updateHPBar:1450];
 	
 	//[sn addChild:healthBar];
-
-	
-	NSMutableArray *path = [[NSMutableArray alloc] init];
 	
 	RouteStep *s1 = [[RouteStep alloc] init];
 	s1.posX = 50;
