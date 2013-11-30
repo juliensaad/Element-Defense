@@ -27,6 +27,8 @@
 		_towerArray = [[NSMutableArray alloc] init];
 		_minions = [[NSMutableArray alloc] init];
 		
+		_blueDots = [[NSMutableArray alloc] init];
+		
 		[self createGrid];
     }
     return self;
@@ -63,6 +65,11 @@
 -(void)updatePath{
     
     [_path removeAllObjects];
+	
+	for(SKSpriteNode* dot in _blueDots){
+		[dot removeFromParent];
+	}
+	[_blueDots removeAllObjects];
     
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
     for(Tower *t in _towerArray){
@@ -81,7 +88,8 @@
     SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
     [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
     [_grid addChild:pathElement];
-    
+    [_blueDots addObject:pathElement];
+	
     while (currentX<endX || currentY<endY) {
         // not arrived in x and in y
         if (currentX<endX && currentY<endY) {
@@ -111,6 +119,7 @@
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
         [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
         [_grid addChild:pathElement];
+		[_blueDots addObject:pathElement];
         
         RouteStep* s =[[RouteStep alloc] init];
         s.posX=currentX*TOWER_SIZE;
@@ -174,25 +183,7 @@
 	
 	[sn updateHPBar:1450];
 	
-	//[sn addChild:healthBar];
-	
-	RouteStep *s1 = [[RouteStep alloc] init];
-	s1.posX = 50;
-	s1.posY = 50;
-	
-	RouteStep *s2 = [[RouteStep alloc] init];
-	s2.posX = 100;
-	s2.posY = 50;
-	
-	RouteStep *s3 = [[RouteStep alloc] init];
-	s3.posX = 100;
-	s3.posY = 100;
-	
-	[path addObject:s1];
-	[path addObject:s2];
-	[path addObject:s3];
-	
-	[sn walkPath:path atIndex:0];
+	[sn walkPath:_path atIndex:0];
 	[self addChild:sn];
 
 }

@@ -20,4 +20,6 @@
 @property (nonatomic) NSTimeInterval lastSpawnTime;
 @property (nonatomic) NSMutableArray * minions;
 @property (nonatomic) NSMutableArray * path;
+
+@property (nonatomic) NSMutableArray * blueDots;
 @end
