@@ -10,4 +10,6 @@
 
 @interface EDMyScene : SKScene
 
+@property (nonatomic) NSMutableArray *towerArray;
+@property (nonatomic, strong) SKNode *grid;
 @end

@@ -7,9 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Tower.h"
 
 @interface Grid : NSObject
 
 @property (nonatomic) int height;
 @property (nonatomic) int width;
+
+@property (nonatomic, strong) NSMutableArray* towers;
+
+
 @end

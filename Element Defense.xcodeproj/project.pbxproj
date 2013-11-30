@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C6537371848F488001FE553 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C6537361848F488001FE553 /* QuartzCore.framework */; };
+		0C65373A184A8187001FE553 /* Tower.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C653739184A8187001FE553 /* Tower.m */; };
 		0CE295B81848ED4D001E8306 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295B71848ED4D001E8306 /* Foundation.framework */; };
 		0CE295BA1848ED4D001E8306 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295B91848ED4D001E8306 /* CoreGraphics.framework */; };
 		0CE295BC1848ED4D001E8306 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295BB1848ED4D001E8306 /* UIKit.framework */; };
@@ -24,6 +26,7 @@
 		0CE295E01848ED4D001E8306 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE295BB1848ED4D001E8306 /* UIKit.framework */; };
 		0CE295E81848ED4D001E8306 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0CE295E61848ED4D001E8306 /* InfoPlist.strings */; };
 		0CE295EA1848ED4D001E8306 /* Element_DefenseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE295E91848ED4D001E8306 /* Element_DefenseTests.m */; };
+		0CE3314F1848EEF200F95CA1 /* Grid.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE3314E1848EEF200F95CA1 /* Grid.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C6537351848F1A0001FE553 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		0C6537361848F488001FE553 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0C653738184A8187001FE553 /* Tower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tower.h; sourceTree = "<group>"; };
+		0C653739184A8187001FE553 /* Tower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tower.m; sourceTree = "<group>"; };
 		0CE295B41848ED4D001E8306 /* Element Defense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Element Defense.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE295B71848ED4D001E8306 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0CE295B91848ED4D001E8306 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -60,6 +67,8 @@
 		0CE295E51848ED4D001E8306 /* Element DefenseTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Element DefenseTests-Info.plist"; sourceTree = "<group>"; };
 		0CE295E71848ED4D001E8306 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0CE295E91848ED4D001E8306 /* Element_DefenseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Element_DefenseTests.m; sourceTree = "<group>"; };
+		0CE3314D1848EEF200F95CA1 /* Grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grid.h; sourceTree = "<group>"; };
+		0CE3314E1848EEF200F95CA1 /* Grid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C6537371848F488001FE553 /* QuartzCore.framework in Frameworks */,
 				0CE295BA1848ED4D001E8306 /* CoreGraphics.framework in Frameworks */,
 				0CE295BC1848ED4D001E8306 /* UIKit.framework in Frameworks */,
 				0CE295BE1848ED4D001E8306 /* SpriteKit.framework in Frameworks */,
@@ -87,6 +97,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C6537341848F15E001FE553 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				0CE3314D1848EEF200F95CA1 /* Grid.h */,
+				0CE3314E1848EEF200F95CA1 /* Grid.m */,
+				0C653738184A8187001FE553 /* Tower.h */,
+				0C653739184A8187001FE553 /* Tower.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
 		0CE295AB1848ED4D001E8306 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +130,7 @@
 		0CE295B61848ED4D001E8306 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0C6537361848F488001FE553 /* QuartzCore.framework */,
 				0CE295B71848ED4D001E8306 /* Foundation.framework */,
 				0CE295B91848ED4D001E8306 /* CoreGraphics.framework */,
 				0CE295BB1848ED4D001E8306 /* UIKit.framework */,
@@ -129,8 +151,10 @@
 				0CE295D11848ED4D001E8306 /* EDMyScene.h */,
 				0CE295D21848ED4D001E8306 /* EDMyScene.m */,
 				0CE295D41848ED4D001E8306 /* Spaceship.png */,
+				0C6537351848F1A0001FE553 /* constants.h */,
 				0CE295D61848ED4D001E8306 /* Images.xcassets */,
 				0CE295C01848ED4D001E8306 /* Supporting Files */,
+				0C6537341848F15E001FE553 /* model */,
 			);
 			path = "Element Defense";
 			sourceTree = "<group>";
@@ -263,8 +287,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CE3314F1848EEF200F95CA1 /* Grid.m in Sources */,
 				0CE295D01848ED4D001E8306 /* EDViewController.m in Sources */,
 				0CE295C61848ED4D001E8306 /* main.m in Sources */,
+				0C65373A184A8187001FE553 /* Tower.m in Sources */,
 				0CE295CA1848ED4D001E8306 /* EDAppDelegate.m in Sources */,
 				0CE295D31848ED4D001E8306 /* EDMyScene.m in Sources */,
 			);
@@ -477,6 +503,7 @@
 				0CE295EF1848ED4D001E8306 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0CE295F01848ED4D001E8306 /* Build configuration list for PBXNativeTarget "Element DefenseTests" */ = {
 			isa = XCConfigurationList;
@@ -485,6 +512,7 @@
 				0CE295F21848ED4D001E8306 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
