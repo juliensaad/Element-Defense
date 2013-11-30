@@ -20,10 +20,11 @@
         /* Setup your scene here */
 		
 		 NSLog(@"Size: %@", NSStringFromCGSize(size));
-        
-        self.backgroundColor = [SKColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.0];
+	
+        self.backgroundColor = [SKColor colorWithRed:0.80 green:0.80 blue:0.80 alpha:1.0];
 
 		_towerArray = [[NSMutableArray alloc] init];
+		_minions = [[NSMutableArray alloc] init];
 		
 		[self createGrid];
     }
@@ -36,7 +37,14 @@
 	for(int i = 0;i<NB_TOWER_X;i++){
 		for(int j = 0; j<NB_TOWER_Y;j++){
 			Tower *tower = [Tower spriteNodeWithColor:[UIColor whiteColor] size:CGSizeMake(TOWER_SIZE-1, TOWER_SIZE-1)];
-			[tower setType:0]; // Pas de tour, type vide
+			
+			// Pas de tour, type vide
+			[tower setType:0];
+			
+			[tower setPosX:i];
+			[tower setPosY:j];
+			
+			
 			[tower setPosition:CGPointMake(i*TOWER_SIZE, j*TOWER_SIZE)];
 			NSLog(@"%f %f", tower.position.x, tower.position.y);
 			[_grid addChild:tower];
@@ -45,6 +53,13 @@
 	}
 	[_grid setPosition:CGPointMake(TOWER_SIZE/2, TOWER_SIZE/2)];
 	[self addChild:_grid];
+
+	
+}
+
+
+// Redraw walking path
+-(void)drawWalkingPath{
 
 	
 }
@@ -59,14 +74,17 @@
 		if(tower.position.x < maxX && tower.position.x > minX
 		   && tower.position.y < maxY && tower.position.y > minY){
 			if(tower.type ==0){
-				[tower setColor:[UIColor redColor]];
+				
 				[tower setType:1];
+				
 			}else{
-				[tower setColor:[UIColor whiteColor]];
+				
 				[tower setType:0];
 			}
 		}
 	}
+	
+	[self drawWalkingPath];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
@@ -79,21 +97,34 @@
 		location.y -= self.grid.position.y;
 		[self addTowerAtLocation:location];
 		
-        
-        /*SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship"];
-        
-        sprite.position = location;
-        
-        SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
-        
-        [sprite runAction:[SKAction repeatActionForever:action]];
-        
-        [self addChild:sprite];*/
+	
     }
 }
 
--(void)update:(CFTimeInterval)currentTime {
-    /* Called before each frame is rendered */
+-(void)createMinion{
+	// walker creation, adding to canvas and to array then making him walk
+	Minion *sn = [Minion spriteNodeWithImageNamed:@"docteur"];
+	[sn setScale:0.5];
+		
+	sn.position = CGPointMake(0, 100);
+	sn.name = @"Minion";
+    
+    [_minions addObject:sn];
+	
+
+	[sn walk];
+	[self addChild:sn];
+
 }
+
+-(void)update:(CFTimeInterval)currentTime {
+	// spawning delay calculation
+    CFTimeInterval timeSinceLastWalker = currentTime - self.lastSpawnTime;
+    
+    // spawn walker every tw0 seconds
+    if (timeSinceLastWalker>2) {
+        [self createMinion];
+        _lastSpawnTime = currentTime;
+    }}
 
 @end

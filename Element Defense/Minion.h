@@ -1,5 +1,5 @@
 //
-//  Tower.h
+//  Minion.h
 //  Element Defense
 //
 //  Created by Julien Saad on 11/30/2013.
@@ -8,10 +8,7 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface Tower : SKSpriteNode
+@interface Minion : SKSpriteNode
 
-@property int posX;
-@property int posY;
-
-@property (nonatomic, setter=setType:) int type;
+-(void)walk;
 @end
