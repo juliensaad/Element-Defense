@@ -17,19 +17,24 @@
 	[self setPath:path];
 	[self setNextStep:[_path objectAtIndex:0]];
 	
+	self.precisePositionX = self.position.x;
+	self.precisePositionY = self.position.y;
+	
 	self.position = CGPointMake([(RouteStep*)[_path objectAtIndex:0] posX], [(RouteStep*)[_path objectAtIndex:0] posY]);
 	if(type==0){
 		[self setMaxHp:1500];
 		[self setCurrentHp:_maxHp];
-		[self setWalkingSpeed:20.0];
+		[self setWalkingSpeed:10.0];
+		[self setSlowFactor:1.0];
 
 	}
 }
 -(void)walk{
 	
-	if(self.position.x == _nextStep.posX && self.position.y == _nextStep.posY){
+	if(((self.position.x >= _nextStep.posX-0.5) && (self.position.x <= _nextStep.posX+0.5)
+		&&
+		(self.position.y >= _nextStep.posY-0.5) && (self.position.y <= _nextStep.posY+0.5))){
 		_currentDestination++;
-		
 		if(_currentDestination==[_path count]){
 			// PERDRE UNE VIE
 			[self setIsReadyToDie:YES];
@@ -39,42 +44,51 @@
 	}
 	
 	
-	float nextX = 0;
-	float nextY = 0;
+	float nextX = 0.0;
+	float nextY = 0.0;
 	
-	if(self.position.x < _nextStep.posX){
-		nextX += _walkingSpeed/20;
-	}else if(self.position.x > _nextStep.posX){
-		nextX -= _walkingSpeed/20;
+	if(self.precisePositionX < _nextStep.posX){
+		nextX += _walkingSpeed*_slowFactor/10.0;
+	}else if(self.precisePositionX > _nextStep.posX){
+		nextX -= _walkingSpeed*_slowFactor/10.0;
 	}
 	
-	if(self.position.y < _nextStep.posY){
-		nextY += _walkingSpeed/20;
-	}else if(self.position.y > _nextStep.posY){
-		nextY -= _walkingSpeed/20;
+	if(self.precisePositionY < _nextStep.posY){
+		nextY += _walkingSpeed*_slowFactor/10.0;
+	}else if(self.precisePositionY > _nextStep.posY){
+		nextY -= _walkingSpeed*_slowFactor/10.0;
 	}
 	
 	
-	[self setPosition:CGPointMake(self.position.x + nextX, self.position.y + nextY )];
-
+	[self setPosition:CGPointMake(self.precisePositionX + nextX, self.precisePositionY + nextY)];
+	self.precisePositionX += nextX;
+	self.precisePositionY += nextY;
 }
 
--(void)walkPath:(NSArray*)path atIndex:(int)index{
+
+
+-(void)slowMinion:(float)slowFactor atTime:(CFTimeInterval)currentTime{
+	// If there is in fact a slow
+	if(slowFactor!=1.0){
+		_slowFactor = slowFactor;
+		_lastSlowTime = currentTime;
+	}
+}
+
+
+-(void)updateMinionAtTime:(CFTimeInterval)currentTime{
 	
-	[self setPosition:CGPointMake(50,50)];
-	/*if(index<[path count]){
-		RouteStep* pt = [path objectAtIndex:index];
-		
-		SKAction * walk = [SKAction moveTo:CGPointMake(pt.posX, pt.posY) duration:10.0/_walkingSpeed];
-		[self runAction:walk completion:^{
-				[self walkPath:path atIndex:index+1];
-		}];
-	}else{
-		[self runAction:[SKAction removeFromParent]];
-		return;
-	}*/
-
+	CFTimeInterval timeSinceLastSlow = currentTime - self.lastSlowTime;
+	
+	if(timeSinceLastSlow>0.5){
+		_slowFactor = 1.0; // Remettre a la vitesse normale
+	}
+	
+	[self walk];
+	
 }
+
+
 #define HPBAR_Y self.size.height/2
 #define HPBAR_WIDTH self.size.width
 

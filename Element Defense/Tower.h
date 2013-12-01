@@ -16,6 +16,7 @@
 @property int fireRate;
 @property int attackDamage;
 @property int range;
+@property float slowRatio;
 
 @property (nonatomic) NSTimeInterval lastAttackTime;
 @property (nonatomic, setter=setType:) int type;

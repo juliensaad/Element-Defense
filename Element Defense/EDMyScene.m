@@ -62,7 +62,7 @@
 }
 
 // Redraw walking path
--(void)updatePathWithInitX:(int)x andInitY:(int)y{
+-(BOOL)updatePathWithInitX:(int)x andInitY:(int)y{
     
     // remove visual and modal path
     [_path removeAllObjects];
@@ -114,7 +114,7 @@
     // if path is blocked
     if (distance[initX][initY]==9999 || grid[initX][initY] || grid[endX][endY]) {
         NSLog(@"path broken");
-        return;
+        return NO;
     }
     
     // current position to initial
@@ -209,7 +209,7 @@
                 break;
             default:
                 NSLog(@"path broken");
-                return;
+                return NO;
                 break;
         }
         
@@ -226,6 +226,7 @@
         [_path addObject:s];
         
     }
+	return YES;
 }
 
 -(NSArray*)getPathWithInitX:(int)x andInitY:(int)y{
@@ -428,6 +429,7 @@
 }
 
 -(BOOL)checkForCollision:(CGPoint)location{
+	
 	return YES;
 }
 
@@ -446,6 +448,8 @@
 			   && tower.position.y < maxY && tower.position.y > minY){
 				if(tower.type ==0){
 					[tower setType:1];
+				}else if(tower.type==1){
+					[tower setType:2];
 				}else{
 					[tower setType:0];
 				}
@@ -491,7 +495,6 @@
 		location.y -= self.grid.position.y;
 		[self addTowerAtLocation:location];
 		
-	
     }
 }
 
@@ -499,6 +502,7 @@
 	
 	Minion *sn = [Minion spriteNodeWithImageNamed:@"tree"];
 	
+	[sn setPosition:CGPointMake(50.0, 120.0)];
 	[sn initWithType:0 andPath:_path];	
 	
 	sn.name = @"Minion";
@@ -532,7 +536,7 @@
 		
 		
 		for(Minion* m in _minions){
-			[m walk];
+			[m updateMinionAtTime:currentTime];
 		}
 		
 		

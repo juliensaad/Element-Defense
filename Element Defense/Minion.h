@@ -14,7 +14,13 @@
 @property CGPoint minionPosition;
 @property int maxHp;
 @property int currentHp;
-@property float walkingSpeed;
+@property (nonatomic)float walkingSpeed;
+@property (nonatomic)float slowFactor;
+
+@property float precisePositionX;
+@property float precisePositionY;
+
+@property CFTimeInterval lastSlowTime;
 
 @property (nonatomic, strong) SKShapeNode* health;
 @property (nonatomic, strong) SKShapeNode* missingHealth;
@@ -24,15 +30,15 @@
 @property int currentDestination;
 @property BOOL isReadyToDie;
 
--(void)initWithType:(int)type andPath:(NSArray*)path;
+-(void)updateMinionAtTime:(CFTimeInterval)currentTime;
 
--(void)walk;
+-(void)slowMinion:(float)slowFactor atTime:(CFTimeInterval)currentTime;
+
+-(void)initWithType:(int)type andPath:(NSArray*)path;
 
 -(void)updateHPBar:(int)hp;
 
 -(void)createHealthbar;
-
--(void)walkPath:(NSArray*)path atIndex:(int)index;
 
 -(void)die;
 

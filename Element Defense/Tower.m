@@ -25,10 +25,15 @@
 		[self setColor:[UIColor redColor]];
 		_fireRate = 1.0;
 		_attackDamage = 20.0;
+		_slowRatio = 1.0; // NO SLOW
 		_range = 80;
 
 	}else if(type==2){
-		
+		_fireRate = 2.0;
+		_attackDamage = 5.0;
+		_range = 150;
+		_slowRatio = 0.5; // 50% SLOW
+		[self setColor:[UIColor blueColor]];
 	}
 }
 
@@ -40,7 +45,7 @@
 			if([minions count]>0){
 				Minion* minionToAttack = [self findClosestMinion:minions];
 				if(minionToAttack!= NULL){
-					[self attackMinion:minionToAttack];
+					[self attackMinion:minionToAttack atTime:currentTime];
 					_lastAttackTime = currentTime;
 				}
 			}
@@ -66,13 +71,16 @@
 	return NULL;
 }
 
--(void)attackMinion:(Minion*)minion{
-	SKSpriteNode *missile = [SKSpriteNode spriteNodeWithColor:[UIColor blackColor] size:CGSizeMake(3, 3)];
+-(void)attackMinion:(Minion*)minion atTime:(CFTimeInterval)currentTime{
+	SKSpriteNode *missile;
+	if(self.type==1)
+		missile= [SKSpriteNode spriteNodeWithColor:[UIColor blackColor] size:CGSizeMake(3, 3)];
+	else if(self.type==2)
+		missile = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(6, 2)];
+	
 	[[self parent] addChild:missile];
 	
-
-	float actualDuration = _fireRate/2.0;
-	 // Determine direction of the walker
+	float actualDuration = 0.4;
 	 
 	 // Create the actions
 	SKAction * actionMoveDone = [SKAction removeFromParent];
@@ -83,9 +91,9 @@
 	 
 	 
 	//This is our general runAction method to make our walker walk
-
 	[missile runAction:[SKAction sequence:@[shoot, actionMoveDone]] completion:^{
 		[minion updateHPBar:minion.currentHp-self.attackDamage];
+		[minion slowMinion:self.slowRatio atTime:currentTime+actualDuration];
 	}];
 
 	
