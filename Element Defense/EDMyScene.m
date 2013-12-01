@@ -30,6 +30,7 @@
 		_blueDots = [[NSMutableArray alloc] init];
 		
 		[self createGrid];
+        [self updatePath];
     }
     return self;
 }
@@ -64,6 +65,7 @@
 // Redraw walking path
 -(void)updatePath{
     
+    // remove visual and modal path
     [_path removeAllObjects];
 	
 	for(SKSpriteNode* dot in _blueDots){
@@ -71,12 +73,13 @@
 	}
 	[_blueDots removeAllObjects];
     
+    // boolean with elements blocking the way
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
-    BOOL visited[NB_TOWER_X][NB_TOWER_Y];
-    int distance[NB_TOWER_X][NB_TOWER_Y];
+    // distance between every grid position and end of grid
+    float distance[NB_TOWER_X][NB_TOWER_Y];
     
+    // fill grid
     for(Tower *t in _towerArray){
-        visited[t.posX][t.posY] = NO;
         if (t.type==0) {
             grid[t.posX][t.posY] = NO;
         }else{
@@ -84,108 +87,146 @@
         }
     }
     
+    // initial and final positions
     int initX=0;
-    int initY=0;
+    int initY=3;
     int endX=NB_TOWER_X-1;
-    int endY=NB_TOWER_Y-1;
+    int endY=3;
     
+    // Set all distances to infinite
     for (int i=0; i<NB_TOWER_X; i++) {
         for(int j=0;j<NB_TOWER_Y;j++){
             distance[i][j]=9999;
         }
     }
-
-    [self setDistance:distance withGrid:grid withPosX:initX withPosY:initY withDist:0];
-   /* for (int i=0; i<NB_TOWER_X; i++) {
+    
+    // set every distance to end position with djikstra
+    [self setDistance:distance withGrid:grid withPosX:endX withPosY:endY withDist:0];
+    
+    // Distance outputs (practical)
+    /*for (int i=0; i<NB_TOWER_X; i++) {
         for(int j=0;j<NB_TOWER_Y;j++){
-            if (!grid[i][j]) {
-                // left
-                if (distance[i-1][j]+1<distance[i][j] && i-1>=0) {
-                    distance[i][j]=distance[i-1][j]+1;
-                }
-                // dig bot-left
-                if (distance[i-1][j-1]+1<distance[i][j] && i-1>=0 && j-1>=0) {
-                    distance[i][j]=distance[i-1][j-1]+1;
-                }
-                // bot
-                if (distance[i][j-1]+1<distance[i][j] && distance[i][j-1]>=0 && j-1>=0) {
-                    distance[i][j]=distance[i][j-1]+1;
-                }
-                // dig bot-right
-                if (distance[i+1][j-1]+1<distance[i][j] && distance[i+1][j-1]>=0 && j-1>=0 && i+1<NB_TOWER_X) {
-                    distance[i][j]=distance[i+1][j-1]+1;
-                }
-                // right
-                if (distance[i+1][j]+1<distance[i][j] && distance[i+1][j]>=0 && i+1<NB_TOWER_X) {
-                    distance[i][j]=distance[i+1][j]+1;
-                }
-                // dig top-right
-                if (distance[i+1][j+1]+1<distance[i][j] && distance[i+1][j+1]>=0 && i+1<NB_TOWER_X && j+1<NB_TOWER_Y) {
-                    distance[i][j]=distance[i+1][j+1]+1;
-                }
-                // top
-                if (distance[i][j+1]+1<distance[i][j] && distance[i][j+1]>=0 && j+1<NB_TOWER_Y) {
-                    distance[i][j]=distance[i][j+1]+1;
-                }
-                // dig top-left
-                if (distance[i-1][j+1]+1<distance[i][j] && distance[i-1][j+1]>=0 && i-1>=0 && j+1<NB_TOWER_Y) {
-                    distance[i][j]=distance[i-1][j+1]+1;
-                }
-            }
+            NSLog(@"(%d,%d) : %f",i,j,distance[i][j]);
         }
     }*/
-    for (int i=0; i<NB_TOWER_X; i++) {
-        for(int j=0;j<NB_TOWER_Y;j++){
-            NSLog(@"(%d,%d) : %d",i,j,distance[i][j]);
-        }
+    
+    // if path is blocked
+    if (distance[initX][initY]==9999 || grid[initX][initY] || grid[endX][endY]) {
+        NSLog(@"path broken");
+        return;
     }
     
-    /*SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
+    // current position to initial
+    int currentX=initX;
+    int currentY=initY;
+    
+    // draw path of initial position
+    SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
     [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
     [_grid addChild:pathElement];
     [_blueDots addObject:pathElement];
 	
-    while (currentX<endX || currentY<endY) {
-        // not arrived in x and in y
-        if (currentX<endX && currentY<endY) {
-            // if diagonal is free
-            if (!grid[currentX+1][currentY+1] && !grid[currentX+1][currentY] && !grid[currentX][currentY+1]) {
-                currentX++;
-                currentY++;
-            }
-            else if(!grid[currentX+1][currentY]){
-                currentX++;
-            }
-            else if(!grid[currentX][currentY+1]){
-                currentY++;
-            }
-        }
-        // arrived in y not in x
-        else if(currentX<endX && currentY>=endY){
-            currentX++;
-        }
-        // arrived in x not in y
-        else if(currentX>=endX && currentY<endY){
-            currentY++;
+    // draw and memorize quickest path
+    while (currentX!=endX || currentY!=endY) {
+        //visited[currentX][currentY]=YES;
+        //NSLog(@"path");
+        
+        // array of neighbors distance to end of maze
+        float neighborDist[8];
+        float minDist=9999;
+        int next=-1;
+        
+        // Every distance is set to infinite
+        for(int i=0;i<8;i++){
+            neighborDist[i]=9999;
         }
         
-        NSLog(@"path");
+        // find every neighbor's distance to end
         
+        //left
+        if(currentX-1>=0)
+            neighborDist[7]=distance[currentX-1][currentY];
+        //left-bot
+        if(currentX-1>=0 && currentY-1>=0)
+            neighborDist[6]=distance[currentX-1][currentY-1];
+        //bot
+        if(currentY-1>=0)
+            neighborDist[4]=distance[currentX][currentY-1];
+        //right-bot
+        if(currentX+1<NB_TOWER_X && currentY-1>=0)
+            neighborDist[1]=distance[currentX+1][currentY-1];
+        //right
+        if(currentX+1<NB_TOWER_X)
+            neighborDist[0]=distance[currentX+1][currentY];
+        //right-top
+        if(currentX+1<NB_TOWER_X && currentY+1<NB_TOWER_Y)
+            neighborDist[2]=distance[currentX+1][currentY+1];
+        //top
+        if(currentY+1<NB_TOWER_Y)
+            neighborDist[3]=distance[currentX][currentY+1];
+        //left-top
+        if(currentX-1>=0 && currentY<NB_TOWER_Y)
+            neighborDist[5]=distance[currentX-1][currentY+1];
+        
+        // find closest neighbor to the end
+        for (int i=0; i<8; i++) {
+            if (neighborDist[i]>=0 && neighborDist[i]<=((NB_TOWER_X-1)*(NB_TOWER_Y-1)) && neighborDist[i]<minDist) {
+                minDist=neighborDist[i];
+                next=i;
+            }
+        }
+        
+        // move trajectory to closest neighbor
+        switch (next) {
+            case 2:
+                currentX++;
+                currentY++;
+                break;
+            case 1:
+                currentX++;
+                currentY--;
+                break;
+            case 0:
+                currentX++;
+                break;
+            case 3:
+                currentY++;
+                break;
+            case 4:
+                currentY--;
+                break;
+            case 5:
+                currentX--;
+                currentY++;
+                break;
+            case 6:
+                currentX--;
+                currentY--;
+                break;
+            case 7:
+                currentX--;
+                break;
+            default:
+                break;
+        }
+        
+        // Draw trajectory
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
         [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
         [_grid addChild:pathElement];
 		[_blueDots addObject:pathElement];
         
+        // add to path
         RouteStep* s =[[RouteStep alloc] init];
         s.posX=currentX*TOWER_SIZE+TOWER_SIZE/2;
         s.posY=currentY*TOWER_SIZE+TOWER_SIZE/2;
         [_path addObject:s];
         
-    }*/
+    }
 }
 
-
--(void)setDistance:(int[NB_TOWER_X][NB_TOWER_Y]) distArray withGrid:(BOOL[NB_TOWER_X][NB_TOWER_Y]) grid withPosX:(int) posX withPosY:(int) posY withDist:(int) dist{
+// Recursive algo that sets distance with end of path to every grid element (djikstra)
+-(void)setDistance:(float[NB_TOWER_X][NB_TOWER_Y]) distArray withGrid:(BOOL[NB_TOWER_X][NB_TOWER_Y]) grid withPosX:(int) posX withPosY:(int) posY withDist:(float) dist{
     
     // out of bound
     if (posX<0 || posY<0 || posX>=NB_TOWER_X || posY>=NB_TOWER_Y) {
@@ -208,19 +249,19 @@
     //left
     [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY withDist:dist+1];
     //left-bot
-    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY-1 withDist:dist+1];
+    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY-1 withDist:dist+1.4];
     //bot
     [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY-1 withDist:dist+1];
     //right-bot
-    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY-1 withDist:dist+1];
+    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY-1 withDist:dist+1.4];
     //right
     [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY withDist:dist+1];
     //right-top
-    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY+1 withDist:dist+1];
+    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY+1 withDist:dist+1.4];
     //top
     [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY+1 withDist:dist+1];
     //left-top
-    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY+1 withDist:dist+1];
+    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY+1 withDist:dist+1.4];
 }
 
 -(void)addTowerAtLocation:(CGPoint)location{
@@ -281,7 +322,7 @@
 	
 	//[sn addChild:healthBar];
 	
-	RouteStep *s1 = [[RouteStep alloc] init];
+	/*RouteStep *s1 = [[RouteStep alloc] init];
 	s1.posX = 50;
 	s1.posY = 50;
 	
@@ -291,11 +332,11 @@
 	
 	RouteStep *s3 = [[RouteStep alloc] init];
 	s3.posX = 100;
-	s3.posY = 100;
+	s3.posY = 100;*/
 	
-	[_path addObject:s1];
-	[_path addObject:s2];
-	[_path addObject:s3];
+	//[_path addObject:s1];
+	//[_path addObject:s2];
+	//[_path addObject:s3];
 	
 	[sn walkPath:_path atIndex:0];
 	[self addChild:sn];
@@ -333,7 +374,7 @@
     // spawn a new minion evrytim
     if (timeSinceLastWalker>2) {
 				
-        [self createMinion];
+       // [self createMinion];
         _lastSpawnTime = currentTime;
 		
     }}
