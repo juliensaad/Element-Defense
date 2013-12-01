@@ -17,4 +17,5 @@
 	#import "Tower.h"
 	#import "Grid.h"
 	#import	"RouteStep.h"
+	#import "Minion.h"
 #endif

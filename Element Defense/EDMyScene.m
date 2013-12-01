@@ -27,6 +27,8 @@
 		_towerArray = [[NSMutableArray alloc] init];
 		_minions = [[NSMutableArray alloc] init];
 		
+		_blueDots = [[NSMutableArray alloc] init];
+		
 		[self createGrid];
     }
     return self;
@@ -63,6 +65,11 @@
 -(void)updatePath{
     
     [_path removeAllObjects];
+	
+	for(SKSpriteNode* dot in _blueDots){
+		[dot removeFromParent];
+	}
+	[_blueDots removeAllObjects];
     
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
     BOOL visited[NB_TOWER_X][NB_TOWER_Y];
@@ -144,10 +151,11 @@
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
         [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
         [_grid addChild:pathElement];
+		[_blueDots addObject:pathElement];
         
         RouteStep* s =[[RouteStep alloc] init];
-        s.posX=currentX*TOWER_SIZE;
-        s.posY=currentY*TOWER_SIZE;
+        s.posX=currentX*TOWER_SIZE+TOWER_SIZE/2;
+        s.posY=currentY*TOWER_SIZE+TOWER_SIZE/2;
         [_path addObject:s];
         
     }*/
@@ -230,12 +238,16 @@
 }
 
 -(void)createMinion{
-	// [Minion spriteNodeWithImageNamed:@"docteur"];//
-	Minion *sn = [Minion spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(MINION_SIZE, MINION_SIZE)];
-	[sn setWalkingSpeed:0.01];
-	[sn setMaxHp:1536];
 	
-	sn.position = CGPointMake(0, 100);
+	// //
+	Minion *sn = [Minion spriteNodeWithImageNamed:@"tree"];
+	[sn setScale:1.0];//[Minion spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(MINION_SIZE, MINION_SIZE)];
+	[sn setWalkingSpeed:5.0];
+	[sn setMaxHp:100];
+	[sn setCurrentHp:100];
+	
+	
+	sn.position = CGPointMake(0, 0);
 	sn.name = @"Minion";
 	
 	[sn createHealthbar];
@@ -271,10 +283,36 @@
 	// spawning delay calculation
     CFTimeInterval timeSinceLastWalker = currentTime - self.lastSpawnTime;
     
-    // spawn walker every tw0 seconds
+	
+	for(Minion* m in _minions){
+		[m walk];
+	}
+	
+	
+	BOOL deadMinionFound = YES;
+	while(deadMinionFound){
+		for(Minion* m in _minions){
+			if(m.currentHp<=0){
+				[_minions removeObject:m];
+				deadMinionFound = YES;
+				break;
+			}
+		}
+		deadMinionFound = NO;
+	}
+	
+
+	
+	for(Tower* t in _towerArray){
+		[t updateTower:currentTime withMinions:_minions];
+	}
+	
+    // spawn a new minion evrytim
     if (timeSinceLastWalker>2) {
+				
         [self createMinion];
         _lastSpawnTime = currentTime;
+		
     }}
 
 @end
