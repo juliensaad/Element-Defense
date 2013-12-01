@@ -75,11 +75,13 @@
     
     // boolean with elements blocking the way
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
+    BOOL visited[NB_TOWER_X][NB_TOWER_Y];
     // distance between every grid position and end of grid
     float distance[NB_TOWER_X][NB_TOWER_Y];
     
     // fill grid
     for(Tower *t in _towerArray){
+        visited[t.posX][t.posY] = NO;
         if (t.type==0) {
             grid[t.posX][t.posY] = NO;
         }else{
@@ -128,7 +130,9 @@
 	
     // draw and memorize quickest path
     while (currentX!=endX || currentY!=endY) {
-        NSLog(@"path");
+        
+        visited[currentX][currentY]=YES;
+        
         // array of neighbors distance to end of maze
         float neighborDist[8];
         float minDist=9999;
@@ -142,28 +146,28 @@
         // find every neighbor's distance to end
         
         //left
-        if(currentX-1>=0)
+        if(currentX-1>=0 && !visited[currentX-1][currentY])
             neighborDist[7]=distance[currentX-1][currentY];
         //left-bot
-        if(currentX-1>=0 && currentY-1>=0 && !grid[currentX-1][currentY] && !grid[currentX][currentY-1])
+        if(currentX-1>=0 && currentY-1>=0 && !grid[currentX-1][currentY] && !grid[currentX][currentY-1] && !visited[currentX-1][currentY-1])
             neighborDist[6]=distance[currentX-1][currentY-1];
         //bot
-        if(currentY-1>=0)
+        if(currentY-1>=0 && !visited[currentX][currentY-1])
             neighborDist[4]=distance[currentX][currentY-1];
         //right-bot
-        if(currentX+1<NB_TOWER_X && currentY-1>=0 && !grid[currentX+1][currentY] && !grid[currentX][currentY-1])
+        if(currentX+1<NB_TOWER_X && currentY-1>=0 && !grid[currentX+1][currentY] && !grid[currentX][currentY-1] && !visited[currentX+1][currentY-1])
             neighborDist[1]=distance[currentX+1][currentY-1];
         //right
-        if(currentX+1<NB_TOWER_X)
+        if(currentX+1<NB_TOWER_X && !visited[currentX+1][currentY])
             neighborDist[0]=distance[currentX+1][currentY];
         //right-top
-        if(currentX+1<NB_TOWER_X && currentY+1<NB_TOWER_Y && !grid[currentX+1][currentY] && !grid[currentX][currentY+1])
+        if(currentX+1<NB_TOWER_X && currentY+1<NB_TOWER_Y && !grid[currentX+1][currentY] && !grid[currentX][currentY+1] && !visited[currentX+1][currentY+1])
             neighborDist[2]=distance[currentX+1][currentY+1];
         //top
-        if(currentY+1<NB_TOWER_Y)
+        if(currentY+1<NB_TOWER_Y && !visited[currentX][currentY+1])
             neighborDist[3]=distance[currentX][currentY+1];
         //left-top
-        if(currentX-1>=0 && currentY<NB_TOWER_Y && !grid[currentX-1][currentY] && !grid[currentX][currentY+1])
+        if(currentX-1>=0 && currentY+1<NB_TOWER_Y && !grid[currentX-1][currentY] && !grid[currentX][currentY+1] && !visited[currentX-1][currentY+1])
             neighborDist[5]=distance[currentX-1][currentY+1];
         
         // find closest neighbor to the end
@@ -173,7 +177,7 @@
                 next=i;
             }
         }
-        
+        NSLog(@"%d", next);
         // move trajectory to closest neighbor
         switch (next) {
             case 2:
@@ -205,6 +209,8 @@
                 currentX--;
                 break;
             default:
+                NSLog(@"path broken");
+                return;
                 break;
         }
         
