@@ -22,6 +22,7 @@
 		[self setMaxHp:1500];
 		[self setCurrentHp:_maxHp];
 		[self setWalkingSpeed:20.0];
+
 	}
 }
 -(void)walk{
@@ -38,8 +39,8 @@
 	}
 	
 	
-	int nextX = 0;
-	int nextY = 0;
+	float nextX = 0;
+	float nextY = 0;
 	
 	if(self.position.x < _nextStep.posX){
 		nextX += _walkingSpeed/20;
@@ -55,7 +56,6 @@
 	
 	
 	[self setPosition:CGPointMake(self.position.x + nextX, self.position.y + nextY )];
-
 
 }
 
@@ -80,7 +80,7 @@
 
 -(void)updateHPBar:(int)hp{
 	[self removeAllActions];
-	NSLog(@"%d OUCH", hp);
+
 	if(hp<=0){
 		[self setCurrentHp:0];
 		[self setIsReadyToDie:YES];

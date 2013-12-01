@@ -16,21 +16,19 @@
 
 	if(type==0){
 		//self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(0,0)];
-		/*self.physicsBody.dynamic = NO;
-		self.physicsBody.affectedByGravity = NO;*/
+		self.physicsBody.dynamic = NO;
 		[self setColor:[UIColor whiteColor]];
 		
 		
-	}else{
-		/*self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
-		self.physicsBody.dynamic = YES;
-		self.physicsBody.affectedByGravity = NO;
-		self.physicsBody.mass = 10000000;*/
+	}else if(type==1){
+		
 		[self setColor:[UIColor redColor]];
 		_fireRate = 1.0;
 		_attackDamage = 20.0;
 		_range = 80;
 
+	}else if(type==2){
+		
 	}
 }
 
