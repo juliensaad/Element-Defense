@@ -61,7 +61,6 @@
 	
 }
 
-
 // Redraw walking path
 -(void)updatePath{
     
@@ -314,36 +313,14 @@
 
 -(void)createMinion{
 	
-	// //
 	Minion *sn = [Minion spriteNodeWithImageNamed:@"tree"];
-	[sn setScale:1.0];//[Minion spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(MINION_SIZE, MINION_SIZE)];
 	
 	[sn initWithType:0 andPath:_path];	
 	
 	sn.name = @"Minion";
     
     [_minions addObject:sn];
-		
-	
-	//[sn addChild:healthBar];
-	
-	/*RouteStep *s1 = [[RouteStep alloc] init];
-	s1.posX = 50;
-	s1.posY = 50;
-	
-	RouteStep *s2 = [[RouteStep alloc] init];
-	s2.posX = 100;
-	s2.posY = 50;
-	
-	RouteStep *s3 = [[RouteStep alloc] init];
-	s3.posX = 100;
-	s3.posY = 100;*/
-	
-	//[_path addObject:s1];
-	//[_path addObject:s2];
-	//[_path addObject:s3];
-	
-	//	[sn walkPath:_path atIndex:0];
+
 	[self addChild:sn];
 
 }
@@ -374,9 +351,6 @@
 				[m walk];
 		}
 		
-		
-		
-
 		
 		for(Tower* t in _towerArray){
 			[t updateTower:currentTime withMinions:_minions];
