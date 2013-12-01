@@ -26,4 +26,6 @@
 
 -(void)walkPath:(NSArray*)path atIndex:(int)index;
 
+-(void)die;
+
 @end

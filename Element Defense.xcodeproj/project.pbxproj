@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C0DBA7A184AAAB3002798BF /* tree@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C0DBA79184AAAB3002798BF /* tree@2x.png */; };
 		0C6537371848F488001FE553 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C6537361848F488001FE553 /* QuartzCore.framework */; };
 		0C65373A184A8187001FE553 /* Tower.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C653739184A8187001FE553 /* Tower.m */; };
 		0C653747184A84F2001FE553 /* PESGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C65373E184A84F1001FE553 /* PESGraph.m */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C0DBA79184AAAB3002798BF /* tree@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tree@2x.png"; sourceTree = "<group>"; };
 		0C6537351848F1A0001FE553 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 		0C6537361848F488001FE553 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0C653738184A8187001FE553 /* Tower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tower.h; sourceTree = "<group>"; };
@@ -121,6 +123,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C0DBA78184AA9DD002798BF /* images */ = {
+			isa = PBXGroup;
+			children = (
+				0C0DBA79184AAAB3002798BF /* tree@2x.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		0C6537341848F15E001FE553 /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +199,7 @@
 		0CE295BF1848ED4D001E8306 /* Element Defense */ = {
 			isa = PBXGroup;
 			children = (
+				0C0DBA78184AA9DD002798BF /* images */,
 				0C65374F184A8D8F001FE553 /* docteur@2x.png */,
 				0C65373B184A84F1001FE553 /* PESGraph */,
 				0CE295C81848ED4D001E8306 /* EDAppDelegate.h */,
@@ -315,6 +326,7 @@
 			files = (
 				0CE295C41848ED4D001E8306 /* InfoPlist.strings in Resources */,
 				0CE295D71848ED4D001E8306 /* Images.xcassets in Resources */,
+				0C0DBA7A184AAAB3002798BF /* tree@2x.png in Resources */,
 				0CE295D51848ED4D001E8306 /* Spaceship.png in Resources */,
 				0C653750184A8D8F001FE553 /* docteur@2x.png in Resources */,
 				0CE295CD1848ED4D001E8306 /* Main.storyboard in Resources */,

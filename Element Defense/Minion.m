@@ -11,7 +11,7 @@
 @implementation Minion
 -(void)walk{
 	// Determine speed of the walker
-    int minDuration = 3.0;
+    /*int minDuration = 3.0;
     int maxDuration = 6.0;
     int rangeDuration = maxDuration - minDuration;
     int actualDuration = (arc4random() % rangeDuration) + minDuration;
@@ -27,47 +27,63 @@
 
 	
     //This is our general runAction method to make our walker walk
-    [self runAction:[SKAction sequence:@[walk, actionMoveDone]]];
+    [self runAction:[SKAction sequence:@[walk, actionMoveDone]]];*/
+	[self setPosition:CGPointMake(self.position.x+_walkingSpeed/20, self.position.y+_walkingSpeed/20)];
 
 }
 
 -(void)walkPath:(NSArray*)path atIndex:(int)index{
 	
-	if(index<[path count]){
+	[self setPosition:CGPointMake(50,50)];
+	/*if(index<[path count]){
 		RouteStep* pt = [path objectAtIndex:index];
 		
-		SKAction * walk = [SKAction moveTo:CGPointMake(pt.posX, pt.posY) duration:10.0*_walkingSpeed];
+		SKAction * walk = [SKAction moveTo:CGPointMake(pt.posX, pt.posY) duration:10.0/_walkingSpeed];
 		[self runAction:walk completion:^{
 				[self walkPath:path atIndex:index+1];
 		}];
 	}else{
 		[self runAction:[SKAction removeFromParent]];
 		return;
-	}
+	}*/
 
 }
 #define HPBAR_Y self.size.height/2
 #define HPBAR_WIDTH self.size.width
 
 -(void)updateHPBar:(int)hp{
-	double hpPercentage = (double)hp/_maxHp;
-	[self setCurrentHp:hp];
-	
-	UIBezierPath* barpath = [[UIBezierPath alloc] init];
-	[barpath moveToPoint:CGPointMake(-self.size.width/2, HPBAR_Y)];
-	[barpath addLineToPoint:CGPointMake(-self.size.width/2 + HPBAR_WIDTH*hpPercentage,HPBAR_Y)];
-	_health.path = barpath.CGPath;
-	
-	float hpWidth =HPBAR_WIDTH*hpPercentage;
+	[self removeAllActions];
+	NSLog(@"%d OUCH", hp);
+	if(hp<=0){
+		[self setCurrentHp:0];
+		[self die];
+		
+	}else{
+		double hpPercentage = (double)hp/_maxHp;
+		[self setCurrentHp:hp];
+		
+		UIBezierPath* barpath = [[UIBezierPath alloc] init];
+		[barpath moveToPoint:CGPointMake(-self.size.width/2, HPBAR_Y)];
+		[barpath addLineToPoint:CGPointMake(-self.size.width/2 + HPBAR_WIDTH*hpPercentage,HPBAR_Y)];
+		_health.path = barpath.CGPath;
+		
+		float hpWidth =HPBAR_WIDTH*hpPercentage;
 
-	UIBezierPath* missingPath = [[UIBezierPath alloc] init];
-	[missingPath moveToPoint:CGPointMake(hpWidth-self.size.width/2, HPBAR_Y)];
-	[missingPath addLineToPoint:CGPointMake(hpWidth-self.size.width/2+(HPBAR_WIDTH-hpWidth), HPBAR_Y)];
-	_missingHealth.path = missingPath.CGPath;
+		UIBezierPath* missingPath = [[UIBezierPath alloc] init];
+		[missingPath moveToPoint:CGPointMake(hpWidth-self.size.width/2, HPBAR_Y)];
+		[missingPath addLineToPoint:CGPointMake(hpWidth-self.size.width/2+(HPBAR_WIDTH-hpWidth), HPBAR_Y)];
+		_missingHealth.path = missingPath.CGPath;
+
+	}
 
 }
 
+-(void)die{
+	[self runAction:[SKAction removeFromParent]];
+}
 
+
+#define HEALTHBAR_HEIGHT 3.0
 -(void)createHealthbar{
 	
 	_health = [SKShapeNode node];
@@ -75,16 +91,14 @@
 	[barpath moveToPoint:CGPointMake(-self.size.width/2, HPBAR_Y)];
 	[barpath addLineToPoint:CGPointMake(-self.size.width/2 + HPBAR_WIDTH,HPBAR_Y)];
 	_health.path = barpath.CGPath;
-	_health.lineWidth = 10.0;
+	_health.lineWidth = HEALTHBAR_HEIGHT;
 	_health.strokeColor = [UIColor greenColor];
 	_health.antialiased = NO;
 	
-	
-	
-	 _missingHealth = [SKShapeNode node];
-	 _missingHealth.lineWidth = 10.0;
-	 _missingHealth.strokeColor = [UIColor redColor];
-	 _missingHealth.antialiased = NO;
+	_missingHealth = [SKShapeNode node];
+	_missingHealth.lineWidth = HEALTHBAR_HEIGHT;
+	_missingHealth.strokeColor = [UIColor redColor];
+	_missingHealth.antialiased = NO;
 	 
 	[self addChild:_health];
 	[self addChild:_missingHealth];
