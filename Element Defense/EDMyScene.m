@@ -282,7 +282,6 @@
 				[tower setType:1];
 				
 			}else{
-				
 				[tower setType:0];
 			}
 		}
@@ -310,19 +309,13 @@
 	// //
 	Minion *sn = [Minion spriteNodeWithImageNamed:@"tree"];
 	[sn setScale:1.0];//[Minion spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(MINION_SIZE, MINION_SIZE)];
-	[sn setWalkingSpeed:5.0];
-	[sn setMaxHp:100];
-	[sn setCurrentHp:100];
 	
+	[sn initWithType:0 andPath:_path];	
 	
-	sn.position = CGPointMake(0, 0);
 	sn.name = @"Minion";
-	
-	[sn createHealthbar];
     
     [_minions addObject:sn];
-	
-	[sn updateHPBar:1450];
+		
 	
 	//[sn addChild:healthBar];
 	
@@ -342,7 +335,7 @@
 	//[_path addObject:s2];
 	//[_path addObject:s3];
 	
-	[sn walkPath:_path atIndex:0];
+	//	[sn walkPath:_path atIndex:0];
 	[self addChild:sn];
 
 }
@@ -350,37 +343,47 @@
 -(void)update:(CFTimeInterval)currentTime {
 	// spawning delay calculation
     CFTimeInterval timeSinceLastWalker = currentTime - self.lastSpawnTime;
-    
+	CFTimeInterval timeSinceLastUpdate = currentTime - self.lastUpdateTime;
 	
-	for(Minion* m in _minions){
-		[m walk];
-	}
-	
-	
-	BOOL deadMinionFound = YES;
-	while(deadMinionFound){
-		for(Minion* m in _minions){
-			if(m.currentHp<=0){
-				[_minions removeObject:m];
-				deadMinionFound = YES;
-				break;
-			}
-		}
-		deadMinionFound = NO;
-	}
-	
-
-	
-	for(Tower* t in _towerArray){
-		[t updateTower:currentTime withMinions:_minions];
-	}
-	
-    // spawn a new minion evrytim
-    if (timeSinceLastWalker>2) {
-				
-       // [self createMinion];
-        _lastSpawnTime = currentTime;
+	if(timeSinceLastUpdate>0.1){
 		
-    }}
+		BOOL deadMinionFound = YES;
+		while(deadMinionFound){
+			for(Minion* m in _minions){
+				if(m.isReadyToDie){
+					[_minions removeObject:m];
+					[m die];
+					deadMinionFound = YES;
+					break;
+				}
+			}
+			deadMinionFound = NO;
+		}
+
+		
+		
+		for(Minion* m in _minions){
+				[m walk];
+		}
+		
+		
+		
+
+		
+		for(Tower* t in _towerArray){
+			[t updateTower:currentTime withMinions:_minions];
+		}
+		
+		// spawn a new minion evrytim
+		if (timeSinceLastWalker>2) {
+					
+			[self createMinion];
+			_lastSpawnTime = currentTime;
+			
+		}
+		
+	}
+	
+}
 
 @end

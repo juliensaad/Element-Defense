@@ -7,6 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "RouteStep.h"
 
 @interface Minion : SKSpriteNode
 
@@ -17,6 +18,13 @@
 
 @property (nonatomic, strong) SKShapeNode* health;
 @property (nonatomic, strong) SKShapeNode* missingHealth;
+
+@property (nonatomic, strong) RouteStep* nextStep;
+@property (nonatomic, strong) NSArray* path;
+@property int currentDestination;
+@property BOOL isReadyToDie;
+
+-(void)initWithType:(int)type andPath:(NSArray*)path;
 
 -(void)walk;
 

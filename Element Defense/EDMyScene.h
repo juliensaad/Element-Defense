@@ -18,6 +18,7 @@
 @property (nonatomic) NSMutableArray* graphNodes;
 
 @property (nonatomic) NSTimeInterval lastSpawnTime;
+@property (nonatomic) NSTimeInterval lastUpdateTime;
 @property (nonatomic) NSMutableArray * minions;
 @property (nonatomic) NSMutableArray * path;
 

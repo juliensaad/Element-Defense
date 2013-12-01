@@ -62,8 +62,6 @@
 		if(distance<_range){
 			return m;
 		}
-		NSLog(@"%f distance", distance);
-		
 		
 	}
 	
@@ -75,7 +73,7 @@
 	[[self parent] addChild:missile];
 	
 
-	int actualDuration = 1.0;
+	float actualDuration = _fireRate/2.0;
 	 // Determine direction of the walker
 	 
 	 // Create the actions

@@ -9,26 +9,53 @@
 #import "Minion.h"
 
 @implementation Minion
+
+-(void)initWithType:(int)type andPath:(NSArray*)path{
+	[self setIsReadyToDie:NO];
+	[self createHealthbar];
+	[self setCurrentDestination:0];
+	[self setPath:path];
+	[self setNextStep:[_path objectAtIndex:0]];
+	
+	self.position = CGPointMake([(RouteStep*)[_path objectAtIndex:0] posX], [(RouteStep*)[_path objectAtIndex:0] posY]);
+	if(type==0){
+		[self setMaxHp:100];
+		[self setCurrentHp:_maxHp];
+		[self setWalkingSpeed:20.0];
+	}
+}
 -(void)walk{
-	// Determine speed of the walker
-    /*int minDuration = 3.0;
-    int maxDuration = 6.0;
-    int rangeDuration = maxDuration - minDuration;
-    int actualDuration = (arc4random() % rangeDuration) + minDuration;
-    actualDuration = 8.0;
-    // Determine direction of the walker
 	
-	// Create the actions
-    SKAction * actionMoveDone = [SKAction removeFromParent];
-    SKAction * walk;
-
-	self.position =CGPointMake(self.frame.size.width + self.size.width/2, 100);
-    walk = [SKAction moveTo:CGPointMake(eScreenWidth, 100) duration:actualDuration];
-
+	if(self.position.x == _nextStep.posX && self.position.y == _nextStep.posY){
+		_currentDestination++;
+		
+		if(_currentDestination==[_path count]){
+			// PERDRE UNE VIE
+			[self setIsReadyToDie:YES];
+		}else{
+			_nextStep = [_path objectAtIndex:_currentDestination];
+		}
+	}
 	
-    //This is our general runAction method to make our walker walk
-    [self runAction:[SKAction sequence:@[walk, actionMoveDone]]];*/
-	[self setPosition:CGPointMake(self.position.x+_walkingSpeed/20, self.position.y+_walkingSpeed/20)];
+	
+	int nextX = 0;
+	int nextY = 0;
+	
+	if(self.position.x < _nextStep.posX){
+		nextX += _walkingSpeed/20;
+	}else if(self.position.x > _nextStep.posX){
+		nextX -= _walkingSpeed/20;
+	}
+	
+	if(self.position.y < _nextStep.posY){
+		nextY += _walkingSpeed/20;
+	}else if(self.position.y > _nextStep.posY){
+		nextY -= _walkingSpeed/20;
+	}
+	
+	
+	[self setPosition:CGPointMake(self.position.x + nextX, self.position.y + nextY )];
+
 
 }
 
@@ -56,8 +83,7 @@
 	NSLog(@"%d OUCH", hp);
 	if(hp<=0){
 		[self setCurrentHp:0];
-		[self die];
-		
+		[self setIsReadyToDie:YES];
 	}else{
 		double hpPercentage = (double)hp/_maxHp;
 		[self setCurrentHp:hp];
