@@ -143,9 +143,32 @@
     /*SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
     [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
     [_grid addChild:pathElement];
-    
-    while (currentX!=endX || currentY!=endY) {
-      
+    [_blueDots addObject:pathElement];
+	
+    while (currentX<endX || currentY<endY) {
+        // not arrived in x and in y
+        if (currentX<endX && currentY<endY) {
+            // if diagonal is free
+            if (!grid[currentX+1][currentY+1] && !grid[currentX+1][currentY] && !grid[currentX][currentY+1]) {
+                currentX++;
+                currentY++;
+            }
+            else if(!grid[currentX+1][currentY]){
+                currentX++;
+            }
+            else if(!grid[currentX][currentY+1]){
+                currentY++;
+            }
+        }
+        // arrived in y not in x
+        else if(currentX<endX && currentY>=endY){
+            currentX++;
+        }
+        // arrived in x not in y
+        else if(currentX>=endX && currentY<endY){
+            currentY++;
+        }
+        
         NSLog(@"path");
         
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
