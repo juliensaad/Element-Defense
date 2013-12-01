@@ -65,7 +65,11 @@
     [_path removeAllObjects];
     
     BOOL grid[NB_TOWER_X][NB_TOWER_Y];
+    BOOL visited[NB_TOWER_X][NB_TOWER_Y];
+    int distance[NB_TOWER_X][NB_TOWER_Y];
+    
     for(Tower *t in _towerArray){
+        visited[t.posX][t.posY] = NO;
         if (t.type==0) {
             grid[t.posX][t.posY] = NO;
         }else{
@@ -73,39 +77,68 @@
         }
     }
     
-    int currentX=0;
-    int currentY=0;
+    int initX=0;
+    int initY=0;
     int endX=NB_TOWER_X-1;
     int endY=NB_TOWER_Y-1;
     
-    SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
+    for (int i=0; i<NB_TOWER_X; i++) {
+        for(int j=0;j<NB_TOWER_Y;j++){
+            distance[i][j]=9999;
+        }
+    }
+
+    [self setDistance:distance withGrid:grid withPosX:initX withPosY:initY withDist:0];
+   /* for (int i=0; i<NB_TOWER_X; i++) {
+        for(int j=0;j<NB_TOWER_Y;j++){
+            if (!grid[i][j]) {
+                // left
+                if (distance[i-1][j]+1<distance[i][j] && i-1>=0) {
+                    distance[i][j]=distance[i-1][j]+1;
+                }
+                // dig bot-left
+                if (distance[i-1][j-1]+1<distance[i][j] && i-1>=0 && j-1>=0) {
+                    distance[i][j]=distance[i-1][j-1]+1;
+                }
+                // bot
+                if (distance[i][j-1]+1<distance[i][j] && distance[i][j-1]>=0 && j-1>=0) {
+                    distance[i][j]=distance[i][j-1]+1;
+                }
+                // dig bot-right
+                if (distance[i+1][j-1]+1<distance[i][j] && distance[i+1][j-1]>=0 && j-1>=0 && i+1<NB_TOWER_X) {
+                    distance[i][j]=distance[i+1][j-1]+1;
+                }
+                // right
+                if (distance[i+1][j]+1<distance[i][j] && distance[i+1][j]>=0 && i+1<NB_TOWER_X) {
+                    distance[i][j]=distance[i+1][j]+1;
+                }
+                // dig top-right
+                if (distance[i+1][j+1]+1<distance[i][j] && distance[i+1][j+1]>=0 && i+1<NB_TOWER_X && j+1<NB_TOWER_Y) {
+                    distance[i][j]=distance[i+1][j+1]+1;
+                }
+                // top
+                if (distance[i][j+1]+1<distance[i][j] && distance[i][j+1]>=0 && j+1<NB_TOWER_Y) {
+                    distance[i][j]=distance[i][j+1]+1;
+                }
+                // dig top-left
+                if (distance[i-1][j+1]+1<distance[i][j] && distance[i-1][j+1]>=0 && i-1>=0 && j+1<NB_TOWER_Y) {
+                    distance[i][j]=distance[i-1][j+1]+1;
+                }
+            }
+        }
+    }*/
+    for (int i=0; i<NB_TOWER_X; i++) {
+        for(int j=0;j<NB_TOWER_Y;j++){
+            NSLog(@"(%d,%d) : %d",i,j,distance[i][j]);
+        }
+    }
+    
+    /*SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
     [pathElement setPosition:CGPointMake(currentX*TOWER_SIZE, currentY*TOWER_SIZE)];
     [_grid addChild:pathElement];
     
-    while (currentX<endX || currentY<endY) {
-        // not arrived in x and in y
-        if (currentX<endX && currentY<endY) {
-            // if diagonal is free
-            if (!grid[currentX+1][currentY+1] && !grid[currentX+1][currentY] && !grid[currentX][currentY+1]) {
-                currentX++;
-                currentY++;
-            }
-            else if(!grid[currentX+1][currentY]){
-                currentX++;
-            }
-            else if(!grid[currentX][currentY+1]){
-                currentY++;
-            }
-        }
-        // arrived in y not in x
-        else if(currentX<endX && currentY>=endY){
-            currentX++;
-        }
-        // arrived in x not in y
-        else if(currentX>=endX && currentY<endY){
-            currentY++;
-        }
-        
+    while (currentX!=endX || currentY!=endY) {
+      
         NSLog(@"path");
         
         SKSpriteNode *pathElement = [SKSpriteNode spriteNodeWithColor:[UIColor blueColor] size:CGSizeMake(4, 4)];
@@ -117,9 +150,46 @@
         s.posY=currentY*TOWER_SIZE;
         [_path addObject:s];
         
+    }*/
+}
+
+
+-(void)setDistance:(int[NB_TOWER_X][NB_TOWER_Y]) distArray withGrid:(BOOL[NB_TOWER_X][NB_TOWER_Y]) grid withPosX:(int) posX withPosY:(int) posY withDist:(int) dist{
+    
+    // out of bound
+    if (posX<0 || posY<0 || posX>=NB_TOWER_X || posY>=NB_TOWER_Y) {
+        return;
+    }
+    // if there is a tower at this position
+    if(grid[posX][posY]){
+        return;
+    }
+    // if actual distance is lower or equal to new dist
+    if (dist>=distArray[posX][posY]) {
+        return;
     }
     
-    NSLog(@"(%d,%d)", currentX,currentY);
+    // Update distance
+    distArray[posX][posY]=dist;
+    
+    //*** Recursively check for neighbors ***//
+    
+    //left
+    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY withDist:dist+1];
+    //left-bot
+    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY-1 withDist:dist+1];
+    //bot
+    [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY-1 withDist:dist+1];
+    //right-bot
+    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY-1 withDist:dist+1];
+    //right
+    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY withDist:dist+1];
+    //right-top
+    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY+1 withDist:dist+1];
+    //top
+    [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY+1 withDist:dist+1];
+    //left-top
+    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY+1 withDist:dist+1];
 }
 
 -(void)addTowerAtLocation:(CGPoint)location{
@@ -188,11 +258,11 @@
 	s3.posX = 100;
 	s3.posY = 100;
 	
-	[path addObject:s1];
-	[path addObject:s2];
-	[path addObject:s3];
+	[_path addObject:s1];
+	[_path addObject:s2];
+	[_path addObject:s3];
 	
-	[sn walkPath:path atIndex:0];
+	[sn walkPath:_path atIndex:0];
 	[self addChild:sn];
 
 }
