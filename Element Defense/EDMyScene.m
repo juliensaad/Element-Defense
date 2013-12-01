@@ -253,19 +253,27 @@
     //left
     [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY withDist:dist+1];
     //left-bot
-    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY-1 withDist:dist+1.4];
+    if(!grid[posX-1][posY] && !grid[posX][posY-1]){
+        [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY-1 withDist:dist+1.4];
+    }
     //bot
     [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY-1 withDist:dist+1];
     //right-bot
-    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY-1 withDist:dist+1.4];
+    if(!grid[posX+1][posY] && !grid[posX][posY-1]){
+        [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY-1 withDist:dist+1.4];
+    }
     //right
     [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY withDist:dist+1];
     //right-top
-    [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY+1 withDist:dist+1.4];
+    if(!grid[posX+1][posY] && !grid[posX][posY+1]){
+        [self setDistance:distArray withGrid:grid withPosX:posX+1 withPosY:posY+1 withDist:dist+1.4];
+    }
     //top
     [self setDistance:distArray withGrid:grid withPosX:posX withPosY:posY+1 withDist:dist+1];
     //left-top
-    [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY+1 withDist:dist+1.4];
+    if(!grid[posX-1][posY] && !grid[posX][posY+1]){
+        [self setDistance:distArray withGrid:grid withPosX:posX-1 withPosY:posY+1 withDist:dist+1.4];
+    }
 }
 
 -(void)addTowerAtLocation:(CGPoint)location{
