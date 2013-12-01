@@ -128,9 +128,7 @@
 	
     // draw and memorize quickest path
     while (currentX!=endX || currentY!=endY) {
-        //visited[currentX][currentY]=YES;
-        //NSLog(@"path");
-        
+        NSLog(@"path");
         // array of neighbors distance to end of maze
         float neighborDist[8];
         float minDist=9999;
@@ -147,25 +145,25 @@
         if(currentX-1>=0)
             neighborDist[7]=distance[currentX-1][currentY];
         //left-bot
-        if(currentX-1>=0 && currentY-1>=0)
+        if(currentX-1>=0 && currentY-1>=0 && !grid[currentX-1][currentY] && !grid[currentX][currentY-1])
             neighborDist[6]=distance[currentX-1][currentY-1];
         //bot
         if(currentY-1>=0)
             neighborDist[4]=distance[currentX][currentY-1];
         //right-bot
-        if(currentX+1<NB_TOWER_X && currentY-1>=0)
+        if(currentX+1<NB_TOWER_X && currentY-1>=0 && !grid[currentX+1][currentY] && !grid[currentX][currentY-1])
             neighborDist[1]=distance[currentX+1][currentY-1];
         //right
         if(currentX+1<NB_TOWER_X)
             neighborDist[0]=distance[currentX+1][currentY];
         //right-top
-        if(currentX+1<NB_TOWER_X && currentY+1<NB_TOWER_Y)
+        if(currentX+1<NB_TOWER_X && currentY+1<NB_TOWER_Y && !grid[currentX+1][currentY] && !grid[currentX][currentY+1])
             neighborDist[2]=distance[currentX+1][currentY+1];
         //top
         if(currentY+1<NB_TOWER_Y)
             neighborDist[3]=distance[currentX][currentY+1];
         //left-top
-        if(currentX-1>=0 && currentY<NB_TOWER_Y)
+        if(currentX-1>=0 && currentY<NB_TOWER_Y && !grid[currentX-1][currentY] && !grid[currentX][currentY+1])
             neighborDist[5]=distance[currentX-1][currentY+1];
         
         // find closest neighbor to the end
@@ -225,7 +223,7 @@
     }
 }
 
-// Recursive algo that sets distance with end of path to every grid element (djikstra)
+// Recursive algo that sets distance with end of path to every grid element (djikstra modified)
 -(void)setDistance:(float[NB_TOWER_X][NB_TOWER_Y]) distArray withGrid:(BOOL[NB_TOWER_X][NB_TOWER_Y]) grid withPosX:(int) posX withPosY:(int) posY withDist:(float) dist{
     
     // out of bound
