@@ -545,7 +545,7 @@
 		}
 		
 		// spawn a new minion evrytim
-		if (timeSinceLastWalker>2) {
+		if (timeSinceLastWalker>0.5) {
 					
 			[self createMinion];
 			_lastSpawnTime = currentTime;

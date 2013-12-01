@@ -22,7 +22,7 @@
 	
 	self.position = CGPointMake([(RouteStep*)[_path objectAtIndex:0] posX], [(RouteStep*)[_path objectAtIndex:0] posY]);
 	if(type==0){
-		[self setMaxHp:1500];
+		[self setMaxHp:60];
 		[self setCurrentHp:_maxHp];
 		[self setWalkingSpeed:10.0];
 		[self setSlowFactor:1.0];

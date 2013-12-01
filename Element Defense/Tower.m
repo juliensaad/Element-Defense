@@ -18,8 +18,6 @@
 		//self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(0,0)];
 		self.physicsBody.dynamic = NO;
 		[self setColor:[UIColor whiteColor]];
-		
-		
 	}else if(type==1){
 		
 		[self setColor:[UIColor redColor]];
@@ -29,10 +27,10 @@
 		_range = 80;
 
 	}else if(type==2){
-		_fireRate = 2.0;
+		_fireRate = 1.5;
 		_attackDamage = 5.0;
 		_range = 150;
-		_slowRatio = 0.5; // 50% SLOW
+		_slowRatio = 0.2; // 50% SLOW
 		[self setColor:[UIColor blueColor]];
 	}
 }

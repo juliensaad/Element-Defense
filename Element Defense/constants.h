@@ -13,10 +13,10 @@
 #define eScreenHeight [UIScreen mainScreen].bounds.size.width
 #define eScreenWidth [UIScreen mainScreen].bounds.size.height
 
-#define GRID_WIDTH 400
+#define GRID_WIDTH 440
 #define GRID_HEIGHT 300
 
-#define TOWER_SIZE 35
+#define TOWER_SIZE 30
 
 #define MINION_SIZE 30
 

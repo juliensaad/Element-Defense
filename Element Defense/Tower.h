@@ -21,7 +21,7 @@
 @property (nonatomic) NSTimeInterval lastAttackTime;
 @property (nonatomic, setter=setType:) int type;
 
--(void)attackMinion:(Minion*)minion;
+-(void)attackMinion:(Minion*)minion atTime:(CFTimeInterval)currentTime;
 
 -(void)updateTower:(CFTimeInterval)currentTime withMinions:(NSArray*)minions;
 @end
